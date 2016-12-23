@@ -1,8 +1,4 @@
 %YAML 1.1
-# This file is a Cloud Foundry application manifest.
-# Use it to deploy your java-jersey-wishlist service to a Cloud Foundry environment.
-# To do so with the Cloud Foundry CLI-tool, execute the following command in this directory:
-#
 #     cf push
 #
 # For more information see:
@@ -10,12 +6,12 @@
 # http://docs.cloudfoundry.org/devguide/deploy-apps/manifest.html
 ---
 applications:
-- name: java-jersey-wishlist
+- name: allforoneshopinvoice
   buildpack: java_buildpack
   instances: 1
   memory: 1024M
-  host: java-jersey-wishlist
-  path: target/java-jersey-wishlist.war
+  host: yaas-allforoneshopinvoice
+  path: target/allforoneinvoice.war
   env:
     YAAS_CLIENT: please fill        # see "YaaS Client" field at "Dev Team"->"Services"->myService of builder
     YAAS_CLIENT_ID: please fill     # see "Client Authorization" section at "Dev Team"->"Services"->myService of builder
