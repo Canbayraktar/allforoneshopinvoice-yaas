@@ -189,7 +189,7 @@
 							<goal>generate-service</goal>
 						</goals>
 						<configuration>
-							<outputPackageName>com.sap.wishlist.api.generated</outputPackageName>
+							<outputPackageName>com.a41.invoice.api.generated</outputPackageName>
 							<outputApiTitle>api</outputApiTitle>
 							<inputFolder>src/main/webapp/meta-data</inputFolder>
 							<async>false</async>
@@ -203,18 +203,7 @@
 						</goals>
 						<configuration>
 							<sourceRamlUri>https://devportal.yaas.io/services/customer/v1/api.raml</sourceRamlUri>
-							<basePackage>com.sap.wishlist.client.customer</basePackage>
-						</configuration>
-					</execution>
-
-					<execution>
-						<id>Document</id>
-						<goals>
-							<goal>generate-client</goal>
-						</goals>
-						<configuration>
-							<sourceRamlUri>https://devportal.yaas.io/services/document/v1/api.raml</sourceRamlUri>
-							<basePackage>com.sap.wishlist.client.document</basePackage>
+							<basePackage>com.a41.invoice.client.customer</basePackage>
 						</configuration>
 					</execution>
 
@@ -225,29 +214,7 @@
 						</goals>
 						<configuration>
 							<sourceRamlUri>https://devportal.yaas.io/services/us/order/v1/api.raml</sourceRamlUri>
-							<basePackage>com.sap.wishlist.client.order</basePackage>
-						</configuration>
-					</execution>
-
-					<execution>
-						<id>EMail</id>
-						<goals>
-							<goal>generate-client</goal>
-						</goals>
-						<configuration>
-							<sourceRamlUri>https://devportal.yaas.io/services/email/v1/api.raml</sourceRamlUri>
-							<basePackage>com.sap.wishlist.client.email</basePackage>
-						</configuration>
-					</execution>
-
-					<execution>
-						<id>Media</id>
-						<goals>
-							<goal>generate-client</goal>
-						</goals>
-						<configuration>
-							<sourceRamlUri>https://devportal.yaas.io/services/media/v2/api.raml</sourceRamlUri>
-							<basePackage>com.sap.wishlist.client.media</basePackage>
+							<basePackage>com.a41.invoice.client.order</basePackage>
 						</configuration>
 					</execution>
 				</executions>

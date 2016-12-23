@@ -10,7 +10,7 @@
         http://www.springframework.org/schema/util 
         http://www.springframework.org/schema/util/spring-util.xsd">
 
-	<context:component-scan base-package="com.sap.wishlist"/>
+	<context:component-scan base-package="com.a41.invoice"/>
 	
 	<!-- include Service SDK libraries -->
 	<import resource="classpath:/META-INF/libraries-spring.xml"/>
@@ -41,44 +41,20 @@
 		</constructor-arg>
 	</bean>
 	
-	<bean id="jsonClient" class="com.sap.wishlist.utility.ClientFactory" />
-	    
-	<bean id="documentClient"
-	    class="com.sap.wishlist.client.document.DocumentClient">
-	    <constructor-arg name="baseUri">
-	        <util:constant static-field="com.sap.wishlist.client.document.DocumentClient.DEFAULT_BASE_URI" />
-	    </constructor-arg>
-	    <constructor-arg name="client" ref="jsonClient" />
-	</bean>
+	<bean id="jsonClient" class="com.a41.invoice.utility.ClientFactory" />
 	
 	<bean id="customerClient"
-	    class="com.sap.wishlist.client.customer.CustomerServiceClient">
+	    class="com.a41.invoice.client.customer.CustomerServiceClient">
 	    <constructor-arg name="baseUri">
-	        <util:constant static-field="com.sap.wishlist.client.customer.CustomerServiceClient.DEFAULT_BASE_URI" />
-	    </constructor-arg>
-	    <constructor-arg name="client" ref="jsonClient" />
-	</bean>
-	
-	<bean id="emailClient"
-	    class="com.sap.wishlist.client.email.EmailServiceClient">
-	    <constructor-arg name="baseUri">
-	        <util:constant static-field="com.sap.wishlist.client.email.EmailServiceClient.DEFAULT_BASE_URI" />
-	    </constructor-arg>
-	    <constructor-arg name="client" ref="jsonClient" />
-	</bean>
-	
-	<bean id="mediaClient"
-	    class="com.sap.wishlist.client.media.SecureMediaClient">
-	    <constructor-arg name="baseUri">
-	        <util:constant static-field="com.sap.wishlist.client.media.SecureMediaClient.DEFAULT_BASE_URI" />
+	        <util:constant static-field="com.a41.invoice.client.customer.CustomerServiceClient.DEFAULT_BASE_URI" />
 	    </constructor-arg>
 	    <constructor-arg name="client" ref="jsonClient" />
 	</bean>
 	
 	<bean id="orderClient"
-	    class="com.sap.wishlist.client.order.OrderServiceClient">
+	    class="com.a41.invoice.client.order.OrderServiceClient">
 	    <constructor-arg name="baseUri">
-	        <util:constant static-field="com.sap.wishlist.client.order.OrderServiceClient.DEFAULT_BASE_URI" />
+	        <util:constant static-field="com.a41.invoice.client.order.OrderServiceClient.DEFAULT_BASE_URI" />
 	    </constructor-arg>
 	    <constructor-arg name="client" ref="jsonClient" />
 	</bean>

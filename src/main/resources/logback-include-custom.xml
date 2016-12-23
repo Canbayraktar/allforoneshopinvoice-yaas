@@ -1,3 +1,3 @@
 <included>
-	<logger name="com.sap.wishlist" level="DEBUG" />
+	<logger name="com.a41.invoice" level="DEBUG" />
 </included>
