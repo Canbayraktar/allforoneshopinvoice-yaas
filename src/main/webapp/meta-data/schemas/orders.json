@@ -1,0 +1,724 @@
+{
+          "$schema": "http://json-schema.org/draft-04/schema#",
+          "type": "object",
+          "properties": {
+              "id": {
+                  "type": "string"
+              },
+              "metadata": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                      "mixins": {
+                          "type": "object",
+                          "additionalProperties": {
+                              "type": "string",
+                              "format": "uri"
+                          }
+                      }
+                  }
+              },
+              "mixins": {
+                  "type": "object",
+                  "description": "The collection of mixins stored in the order. Each attribute is a separate mixin"
+              },
+              "created": {
+                  "type": "string",
+                  "format": "date-time",
+                  "description": "Unix time stamp"
+              },
+              "completed": {
+                  "type": "string",
+                  "format": "date-time",
+                  "description": "Unix time stamp"
+              },
+              "status": {
+                  "$schema": "http://json-schema.org/draft-04/schema#",
+                  "enum": [
+                      "CREATED",
+                      "CONFIRMED",
+                      "DECLINED",
+                      "SHIPPED",
+                      "COMPLETED"
+                  ],
+                  "description": "The status of the order"
+              },
+              "entries": {
+                  "type": "array",
+                  "items": {
+                      "description": "Denotes a part of an order",
+                      "$schema": "http://json-schema.org/draft-04/schema#",
+                      "type": "object",
+                      "properties": {
+                          "metadata": {
+                              "type": "object",
+                              "additionalProperties": false,
+                              "description": "The metadata for mixins stored in this order entry",
+                              "properties": {
+                                  "mixins": {
+                                      "type": "object",
+                                      "additionalProperties": {
+                                          "type": "string",
+                                          "format": "uri"
+                                      }
+                                  }
+                              }
+                          },
+                          "id": {
+                              "type": "string"
+                          },
+                          "amount": {
+                              "type": "integer"
+                          },
+                          "originalAmount": {
+                              "type": "number",
+                              "description": "Original price per unit of an item"
+                          },
+                          "unitPrice": {
+                              "type": "number",
+                              "description": "Effective price per unit of an item"
+                          },
+                          "totalPrice": {
+                              "type": "number",
+                              "description": "Total price of all items"
+                          },
+                          "measurementUnit": {
+                              "description": "Unit pricing information for a given measure",
+                              "type": "object",
+                              "$schema": "http://json-schema.org/draft-04/schema",
+                              "properties": {
+                                  "value": {
+                                      "description": "The unit of measurement for the order line item unit price.",
+                                      "type": "number",
+                                      "minimum": 0
+                                  },
+                                  "unit": {
+                                      "description": "The unit of measurement. We recommend the SI units and their derivates, e.g. 'kg', 'g', 'm', etc.",
+                                      "type": "string"
+                                  }
+                              },
+                              "required": [
+                                  "value"
+                              ]
+                          },
+                          "link": {
+                              "type": "string",
+                              "description": "Hypermedia reference to original product"
+                          },
+                          "product": {
+                              "description": "Complete detail of a product",
+                              "$schema": "http://json-schema.org/draft-04/schema#",
+                              "type": "object",
+                              "properties": {
+                                  "metadata": {
+                                      "type": "object",
+                                      "additionalProperties": false,
+                                      "properties": {
+                                          "mixins": {
+                                              "type": "object",
+                                              "additionalProperties": {
+                                                  "type": "string",
+                                                  "format": "uri"
+                                              }
+                                          }
+                                      }
+                                  },
+                                  "id": {
+                                      "type": "string",
+                                      "description": "Unique identifier"
+                                  },
+                                  "sku": {
+                                      "type": "string",
+                                      "description": "Product stock keeping unit. If not provided, it is generated (mainly based on name)."
+                                  },
+                                  "name": {
+                                      "type": "string",
+                                      "description": "The name of the product."
+                                  },
+                                  "description": {
+                                      "type": "string",
+                                      "description": "The description of the product."
+                                  },
+                                  "published": {
+                                      "type": "boolean",
+                                      "default": false,
+                                      "description": "This flag determines if product is live."
+                                  },
+                                  "images": {
+                                      "type": "array",
+                                      "items": {
+                                          "$ref": "mediaSchema"
+                                      }
+                                  },
+                                  "mixins": {
+                                      "type": "object",
+                                      "description": "The collection of mixins stored in the product. Each attribute is a separate mixin"
+                                  }
+                              },
+                              "required": [
+                                  "name"
+                              ]
+                          },
+                          "tax": {
+                              "$schema": "http://json-schema.org/draft-04/schema#",
+                              "type": "object",
+                              "properties": {
+                                  "total": {
+                                      "$ref": "tax-total",
+                                      "description": "Actual tax amount to be charged"
+                                  },
+                                  "lines": {
+                                      "type": "array",
+                                      "items": {
+                                          "$ref": "tax-line",
+                                          "description": "Tax data that serves as the basis to calculate taxes"
+                                      }
+                                  }
+                              },
+                              "required": [
+                                  "total"
+                              ]
+                          },
+                          "discounts": {
+                              "type": "array",
+                              "items": {
+                                  "$schema": "http://json-schema.org/draft-04/schema#",
+                                  "description": "Discount applied to entire Order or an Order Entry",
+                                  "type": "object",
+                                  "properties": {
+                                      "code": {
+                                          "type": "string"
+                                      },
+                                      "amount": {
+                                          "type": "number"
+                                      },
+                                      "currency": {
+                                          "type": "string",
+                                          "description": "ISO 4217 currency code, e.g.: USD, EUR, CAD"
+                                      },
+                                      "name": {
+                                          "type": "string"
+                                      },
+                                      "discountRate": {
+                                          "type": "number"
+                                      },
+                                      "sequenceId": {
+                                          "type": "integer"
+                                      },
+                                      "link": {
+                                          "$ref": "reference",
+                                          "description": "Reference to Discount resource for more information"
+                                      }
+                                  },
+                                  "required": [
+                                      "code",
+                                      "amount",
+                                      "currency",
+                                      "sequenceId"
+                                  ]
+                              }
+                          },
+                          "mixins": {
+                              "type": "object",
+                              "description": "The collection of mixins stored in the order entry. Each attribute is a separate mixin"
+                          }
+                      }
+                  }
+              },
+              "discounts": {
+                  "type": "array",
+                  "items": {
+                      "$schema": "http://json-schema.org/draft-04/schema#",
+                      "description": "Discount applied to entire Order or an Order Entry",
+                      "type": "object",
+                      "properties": {
+                          "code": {
+                              "type": "string"
+                          },
+                          "amount": {
+                              "type": "number"
+                          },
+                          "currency": {
+                              "type": "string",
+                              "description": "ISO 4217 currency code, e.g.: USD, EUR, CAD"
+                          },
+                          "name": {
+                              "type": "string"
+                          },
+                          "discountRate": {
+                              "type": "number"
+                          },
+                          "sequenceId": {
+                              "type": "integer"
+                          },
+                          "link": {
+                              "description": "Reference to other resource",
+                              "$schema": "http://json-schema.org/schema#",
+                              "type": "object",
+                              "properties": {
+                                  "id": {
+                                      "type": "string"
+                                  },
+                                  "type": {
+                                      "type": "string"
+                                  },
+                                  "url": {
+                                      "type": "string"
+                                  }
+                              },
+                              "required": [
+                                  "id",
+                                  "type"
+                              ]
+                          }
+                      },
+                      "required": [
+                          "code",
+                          "amount",
+                          "currency",
+                          "sequenceId"
+                      ]
+                  }
+              },
+              "customer": {
+                  "description": "Contains Customer information",
+                  "$schema": "http://json-schema.org/draft-04/schema#",
+                  "type": "object",
+                  "properties": {
+                      "id": {
+                          "type": "string",
+                          "description": "Customer id"
+                      },
+                      "name": {
+                          "type": "string",
+                          "description": "Customer name. Either the 'name' field or both of 'firstName' and 'lastName' fields must be provided."
+                      },
+                      "title": {
+                          "type": "string"
+                      },
+                      "firstName": {
+                          "type": "string",
+                          "description": "Customer first name. Either the 'name' field or both of 'firstName' and 'lastName' fields must be provided."
+                      },
+                      "middleName": {
+                          "type": "string"
+                      },
+                      "lastName": {
+                          "type": "string",
+                          "description": "Customer last name. Either the 'name' field or both of 'firstName' and 'lastName' fields must be provided."
+                      },
+                      "email": {
+                          "type": "string",
+                          "description": "Customer email"
+                      },
+                      "company": {
+                          "type": "string"
+                      },
+                      "metadata": {
+                          "type": "object",
+                          "additionalProperties": false,
+                          "description": "The metadata for mixins stored in this customer attribute",
+                          "properties": {
+                              "mixins": {
+                                  "type": "object",
+                                  "additionalProperties": {
+                                      "type": "string",
+                                      "format": "uri"
+                                  }
+                              }
+                          }
+                      },
+                      "mixins": {
+                          "type": "object",
+                          "description": "The collection of mixins stored in the order entry. Each attribute is a separate mixin"
+                      }
+                  },
+                  "required": [
+                      "email"
+                  ]
+              },
+              "siteCode": {
+                  "type": "string",
+                  "description": "the code representing site, the order is created on"
+              },
+              "billingAddress": {
+                  "description": "Billing address",
+                  "$schema": "http://json-schema.org/draft-04/schema#",
+                  "type": "object",
+                  "properties": {
+                      "metadata": {
+                          "type": "object",
+                          "additionalProperties": false,
+                          "description": "The metadata for mixins stored in this address",
+                          "properties": {
+                              "mixins": {
+                                  "type": "object",
+                                  "additionalProperties": {
+                                      "type": "string",
+                                      "format": "uri"
+                                  }
+                              }
+                          }
+                      },
+                      "contactName": {
+                          "type": "string"
+                      },
+                      "companyName": {
+                          "type": "string"
+                      },
+                      "street": {
+                          "type": "string"
+                      },
+                      "streetNumber": {
+                          "type": "string"
+                      },
+                      "streetAppendix": {
+                          "type": "string"
+                      },
+                      "extraLine1": {
+                          "type": "string"
+                      },
+                      "extraLine2": {
+                          "type": "string"
+                      },
+                      "extraLine3": {
+                          "type": "string"
+                      },
+                      "extraLine4": {
+                          "type": "string"
+                      },
+                      "zipCode": {
+                          "type": "string"
+                      },
+                      "city": {
+                          "type": "string"
+                      },
+                      "country": {
+                          "type": "string",
+                          "description": "An ISO 2 standard country code. eg: DE"
+                      },
+                      "state": {
+                          "type": "string"
+                      },
+                      "contactPhone": {
+                          "type": "string"
+                      },
+                      "mixins": {
+                          "type": "object",
+                          "description": "The collection of mixins stored in the address. Each attribute is a separate mixin"
+                      }
+                  },
+                  "required": [
+                      "contactName",
+                      "street",
+                      "zipCode",
+                      "city",
+                      "country"
+                  ]
+              },
+              "shippingAddress": {
+                  "description": "Shipping address",
+                  "$schema": "http://json-schema.org/draft-04/schema#",
+                  "type": "object",
+                  "properties": {
+                      "metadata": {
+                          "type": "object",
+                          "additionalProperties": false,
+                          "description": "The metadata for mixins stored in this address",
+                          "properties": {
+                              "mixins": {
+                                  "type": "object",
+                                  "additionalProperties": {
+                                      "type": "string",
+                                      "format": "uri"
+                                  }
+                              }
+                          }
+                      },
+                      "contactName": {
+                          "type": "string"
+                      },
+                      "companyName": {
+                          "type": "string"
+                      },
+                      "street": {
+                          "type": "string"
+                      },
+                      "streetNumber": {
+                          "type": "string"
+                      },
+                      "streetAppendix": {
+                          "type": "string"
+                      },
+                      "extraLine1": {
+                          "type": "string"
+                      },
+                      "extraLine2": {
+                          "type": "string"
+                      },
+                      "extraLine3": {
+                          "type": "string"
+                      },
+                      "extraLine4": {
+                          "type": "string"
+                      },
+                      "zipCode": {
+                          "type": "string"
+                      },
+                      "city": {
+                          "type": "string"
+                      },
+                      "country": {
+                          "type": "string",
+                          "description": "An ISO 2 standard country code. eg: DE"
+                      },
+                      "state": {
+                          "type": "string"
+                      },
+                      "contactPhone": {
+                          "type": "string"
+                      },
+                      "mixins": {
+                          "type": "object",
+                          "description": "The collection of mixins stored in the address. Each attribute is a separate mixin"
+                      }
+                  },
+                  "required": [
+                      "contactName",
+                      "street",
+                      "zipCode",
+                      "city",
+                      "country"
+                  ]
+              },
+              "subTotalPrice": {
+                  "type": "number",
+                  "description": "Subtotal value of the order"
+              },
+              "totalPrice": {
+                  "type": "number",
+                  "description": "Total value of the entire order"
+              },
+              "currency": {
+                  "type": "string",
+                  "description": "Currency used for within the entire order (three letter code)",
+                  "default": "USD"
+              },
+              "tax": {
+                  "$schema": "http://json-schema.org/draft-04/schema#",
+                  "type": "object",
+                  "properties": {
+                      "total": {
+                          "description": "Actual tax amount to be charged",
+                          "$schema": "http://json-schema.org/draft-04/schema#",
+                          "type": "object",
+                          "properties": {
+                              "amount": {
+                                  "type": "number",
+                                  "default": 0,
+                                  "description": "The tax amount in the specified currency."
+                              },
+                              "currency": {
+                                  "type": "string",
+                                  "default": "USD",
+                                  "description": "ISO 4217 currency code, e.g.: USD, EUR, CHF"
+                              },
+                              "inclusive": {
+                                  "type": "boolean",
+                                  "default": false,
+                                  "description": "Determines if the tax is already included in the line price"
+                              }
+                          },
+                          "required": [
+                              "amount",
+                              "currency",
+                              "inclusive"
+                          ]
+                      },
+                      "lines": {
+                          "type": "array",
+                          "items": {
+                              "description": "Tax data that serves as the basis to calculate taxes",
+                              "$schema": "http://json-schema.org/draft-04/schema#",
+                              "type": "object",
+                              "properties": {
+                                  "amount": {
+                                      "type": "number",
+                                      "description": "The tax amount in the specified currency."
+                                  },
+                                  "currency": {
+                                      "type": "string",
+                                      "default": "USD",
+                                      "description": "ISO 4217 currency code, e.g.: USD, EUR, CAD"
+                                  },
+                                  "code": {
+                                      "type": "string",
+                                      "description": "e.g.: VAT_DE_REGULAR"
+                                  },
+                                  "name": {
+                                      "type": "string",
+                                      "description": "e.g.: Mehrwertsteuer 19%"
+                                  },
+                                  "rate": {
+                                      "type": "number",
+                                      "description": "The tax rate in percentage, e.g.: 19"
+                                  },
+                                  "taxable": {
+                                      "type": "number",
+                                      "description": "The total taxable amount in the specified currency."
+                                  },
+                                  "sequenceId": {
+                                      "type": "integer",
+                                      "description": "Order number of the specified tax type."
+                                  },
+                                  "inclusive": {
+                                      "type": "boolean",
+                                      "default": false,
+                                      "description": "Determines if the tax is already included in the line price"
+                                  }
+                              },
+                              "required": [
+                                  "amount",
+                                  "currency",
+                                  "sequenceId",
+                                  "inclusive"
+                              ]
+                          }
+                      }
+                  },
+                  "required": [
+                      "total"
+                  ]
+              },
+              "payments": {
+                  "type": "array",
+                  "items": {
+                      "$schema": "http://json-schema.org/draft-04/schema",
+                      "type": "object",
+                      "properties": {
+                          "status": {
+                              "$schema": "http://json-schema.org/draft-04/schema#",
+                              "enum": [
+                                  "PENDING",
+                                  "SUCCESS",
+                                  "FAILURE"
+                              ],
+                              "description": "The status of the payment"
+                          },
+                          "method": {
+                              "type": "string",
+                              "description": "The method of payment: STRIPE / Credit Cart / etc (currently only STRIPE)"
+                          },
+                          "paymentResponse": {
+                              "type": "string",
+                              "description": "Response string from the payment gateway API call"
+                          },
+                          "paidAmount": {
+                              "type": "number",
+                              "description": "The amount paid"
+                          },
+                          "currency": {
+                              "type": "string",
+                              "description": "Currency used for the payment (three letter code)"
+                          }
+                      },
+                      "required": [
+                          "status",
+                          "method",
+                          "paidAmount",
+                          "currency"
+                      ]
+                  }
+              },
+              "shipments": {
+                  "type": "array",
+                  "items": {
+                      "$schema": "http://json-schema.org/draft-04/schema",
+                      "type": "object",
+                      "properties": {
+                          "trackingNumber": {
+                              "type": "string",
+                              "description": "Tracking number of the shipment"
+                          },
+                          "carrier": {
+                              "type": "string",
+                              "description": "Shipment carrier (e.g. FEDEX, UPS, ...)"
+                          },
+                          "shippedDate": {
+                              "type": "string",
+                              "format": "date-time",
+                              "description": "Date of shipment"
+                          }
+                      },
+                      "required": [
+                          "carrier",
+                          "shippedDate"
+                      ]
+                  }
+              },
+              "shipping": {
+                  "$schema": "http://json-schema.org/draft-04/schema#",
+                  "type": "object",
+                  "properties": {
+                      "total": {
+                          "$ref": "https://api.beta.yaas.io/patterns/v2/schema-monetary-amount.json",
+                          "description": "The total shipping cost."
+                      },
+                      "lines": {
+                          "type": "array",
+                          "items": {
+                              "$schema": "http://json-schema.org/draft-04/schema#",
+                              "type": "object",
+                              "properties": {
+                                  "amount": {
+                                      "type": "number",
+                                      "default": 0,
+                                      "description": "The total amount in the specified currency."
+                                  },
+                                  "currency": {
+                                      "type": "string",
+                                      "default": "USD",
+                                      "pattern": "^[a-zA-Z]{3}$",
+                                      "description": "ISO 4217 currency code, e.g.: USD, EUR, CHF"
+                                  },
+                                  "code": {
+                                      "type": "string",
+                                      "description": "The ID of the shipping method."
+                                  },
+                                  "name": {
+                                      "type": "string",
+                                      "description": "The name of the shipping method."
+                                  },
+                                  "discounts": {
+                                      "type": "array",
+                                      "items": {
+                                          "$ref": "discount"
+                                      }
+                                  },
+                                  "tax": {
+                                      "$ref": "tax"
+                                  },
+                                  "link": {
+                                      "$ref": "reference",
+                                      "description": "Reference to shipping resource for more information."
+                                  }
+                              },
+                              "required": [
+                                  "code"
+                              ]
+                          }
+                      }
+                  },
+                  "required": [
+                      "total"
+                  ]
+              }
+          },
+          "required": [
+              "created",
+              "status",
+              "entries",
+              "customer",
+              "totalPrice"
+          ]
+      }
